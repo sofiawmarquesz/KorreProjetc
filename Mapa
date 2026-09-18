@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Projeto Korre</title>
+
+  <!-- CSS do Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+  <style>
+    #map {
+      height: 500px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Projeto Korre!</h2>
+<div id="map"></div>
+
+<!-- JS do Leaflet -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+  // Coordenadas (exemplo: Pernambuco)
+  var map = L.map('map').setView([-8.233, -35.796], 13);
+
+  // Camada do OpenStreetMap
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap'
+  }).addTo(map);
+
+  // Adicionando marcador
+  var marker = L.marker([-8.233, -35.796]).addTo(map);
+
+    L.marker([-7.9316810, -34.8564830]).addTo(map)
+    .bindPopup("Comedoria O Guloso");
+
+    L.marker([-7.8993010, -34.8294660]).addTo(map)
+    .bindPopup("Donna Miss");
+
+    L.marker([-7.8918070, -34.8278890]).addTo(map)
+    .bindPopup("O Lenhador");
+
+    L.marker([-7.9239330, -34.8509350]).addTo(map)
+    .bindPopup("Dona do Sabor");
+
+    L.marker([-7.8799240, -34.8314670]).addTo(map)
+    .bindPopup("Zé Coxinha");
+
+    L.marker([-7.9510240, -34.8616980]).addTo(map)
+    .bindPopup("Recanto Oriental");
+
+    L.marker([-7.9618660, -34.8482960]).addTo(map)
+    .bindPopup("Papi Burger");
+
+    L.marker([-7.9224980, -34.8213900]).addTo(map)
+    .bindPopup("Crispy Chicken / Rainha da Pizza / Click Pizza");
+
+    L.marker([-7.9043160, -34.8358990]).addTo(map)
+    .bindPopup("Oriental Sushi");
+
+    L.marker([-7.9017060, -34.8266080]).addTo(map)
+    .bindPopup("JR Lanches");
+
+    L.marker([-7.9188620, -34.8248550]).addTo(map)
+    .bindPopup("Tropical Comedoria");
+
+    L.marker([-7.9326260, -34.8236420]).addTo(map)
+    .bindPopup("Hamburgrill");
+
+    L.marker([-7.9735260, -34.8373990]).addTo(map)
+    .bindPopup("Barriga Cheia");
+
+    L.marker([-7.9193950, -34.8219770]).addTo(map)
+    .bindPopup("J Mix Janga");
+
+    L.marker([-7.9291980, -34.8228770]).addTo(map)
+    .bindPopup("Delikata");
+
+    L.marker([-7.9466440, -34.8574560]).addTo(map)
+    .bindPopup("Marrom Glacê");
+
+    L.marker([-7.9133590, -34.8389910]).addTo(map)
+    .bindPopup("RS Galetos");
+
+    L.marker([-7.9200120, -34.8213270]).addTo(map)
+    .bindPopup("Kyoto Sushi / Sushi Prime");
+
+    L.marker([-7.9043030, -34.8260330]).addTo(map)
+    .bindPopup("Rainha do Yaksoba / A Chinesinha");
+
+    L.marker([-7.9175604, -34.83356]).addTo(map)
+    .bindPopup("Super Lanches");
+
+    L.marker([-7.9284147, -34.8223172]).addTo(map)
+    .bindPopup("Dogueria 1111");
+
+    L.marker([-7.9443755,-34.8252818]).addTo(map)
+    .bindPopup("ComeKone Temakeria");
+
+    L.marker([-7.94159,-34.8247781]).addTo(map)
+    .bindPopup("Komu Sushi / Mini Mundo");
+
+    L.marker([-7.9446462, -34.8253372]).addTo(map)
+    .bindPopup("Churrascaria Tempero Goiano");
+
+    L.marker([-7.9319366, -34.8235994]).addTo(map)
+    .bindPopup("Restaurante Flor do Janga");
+
+    L.marker([-7.9243953, -34.8213861]).addTo(map)
+    .bindPopup("Buu Creams");
+
+     L.marker([-7.9621335, -34.8482154]).addTo(map)
+    .bindPopup("Chells Burger");
+
+    L.marker([-7.9664126, -34.8327987]).addTo(map)
+    .bindPopup("Seu Parmê");
+
+    L.marker([-7.9610054, -34.8367848]).addTo(map)
+    .bindPopup("Joe Sushi");
+
+    L.marker([-7.9301599, -34.8549882]).addTo(map)
+    .bindPopup("Ootiima Pizza");
+
+    L.marker([-7.8798862,-34.8307732]).addTo(map)
+    .bindPopup("Churrascaria do Gaúcho em Casa");
+
+    L.marker([-7.92972, -34.8236287]).addTo(map)
+    .bindPopup("Quero + Dog");
+
+    L.marker([-7.9287376, -34.8233003]).addTo(map)
+    .bindPopup("Quero + Pizza");
+
+    L.marker([-7.9292832, -34.8239754]).addTo(map)
+    .bindPopup("I9 Burger");
+
+    L.marker([-7.9477598, -34.8575418]).addTo(map)
+    .bindPopup("Pizzarella");
+
+    L.marker([-7.9527992, -34.8494706]).addTo(map)
+    .bindPopup("Esconderijo Bar & Petiscaria");
+
+    L.marker([-7.9301105, -34.8231291]).addTo(map)
+    .bindPopup("Taiyang");
+
+    L.marker([-7.9189167, -34.8210343]).addTo(map)
+    .bindPopup("Dona Florinda");
+
+    L.marker([-7.91047, -34.8241256]).addTo(map)
+    .bindPopup("Super Burguer");
+
+    L.marker([-7.8919146,-34.8345475]).addTo(map)
+    .bindPopup("Carioca Burger");
+
+    L.marker([-7.9078342, -34.8385612]).addTo(map)
+    .bindPopup("Kanan Sushi / Sushi Abusado");
+
+    L.marker([-7.896357, -34.837351]).addTo(map)
+    .bindPopup("Vaca Burguer");
+
+    L.marker([-7.9621181, -34.8432307]).addTo(map)
+    .bindPopup("Fina Farina Rio Doce");
+
+    L.marker([-7.9687972, -34.8361139]).addTo(map)
+    .bindPopup("Papinhos Burguer");
+
+    L.marker([-7.946108,-34.8318885]).addTo(map)
+    .bindPopup("Amigos Pizza");
+
+    L.marker([-7.9290676, -34.854219]).addTo(map)
+    .bindPopup("X Pizza Food Paulista");
+
+    L.marker([-7.9298282, -34.8230309]).addTo(map)
+    .bindPopup("Frosty Sorvetes");
+
+    L.marker([-7.9298282, -34.8230309]).addTo(map)
+    .bindPopup("Frosty Sorvetes Janga");
+
+    L.marker([-7.9465326, -34.8578054]).addTo(map)
+    .bindPopup("Frosty Sorvetes Av. Brasil");
+
+    L.marker([-7.9421545,-34.8655154]).addTo(map)
+    .bindPopup("Frosty Sorvetes Novo Atacarejo");
+
+    L.marker([-7.9183393, -34.8331516]).addTo(map)
+    .bindPopup("Baluarte Mini-Market 24h");
+
+    L.marker([-7.9479582, -34.8264661]).addTo(map)
+    .bindPopup("Seu Coxa");
+
+    L.marker([-7.9479582, -34.8264661]).addTo(map)
+    .bindPopup("Seu Coxa");
+
+    L.marker([-7.9389743, -34.8261289]).addTo(map)
+    .bindPopup("A Fabrica Pizzas");
+
+     L.marker([-7.9317185, -34.8565782]).addTo(map)
+    .bindPopup("Recanto do Bob");
+
+    L.marker([-7.9385682,-34.8289339]).addTo(map)
+    .bindPopup("Galeto do Rafa / Medeiros Pizza");
+
+    L.marker([-7.9395735,-34.8321816]).addTo(map)
+    .bindPopup("NB House Burguer");
+
+    L.marker([-7.9305502,-34.8636412]).addTo(map)
+    .bindPopup("Lucy Santos Confeitaria Artesanal");
+
+    L.marker([-7.9259286,-34.8304986]).addTo(map)
+    .bindPopup("Esfiharia Shalom");
+
+
+
+
+
+  // Popup
+  marker.bindPopup("Aqui é um ponto marcado!").openPopup();
+
+</script>
+
+</body>
+</html>
