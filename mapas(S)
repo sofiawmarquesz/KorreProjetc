@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projeto Korre - Mapa de Estabelecimentos</title>
+  <!-- CSS do Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #222;
+    }
+    #map {
+      height: 70vh;
+      min-height: 500px;
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+<h2>🍽️ Projeto Korre - Estabelecimentos Locais</h2>
+<div id="map"></div>
+
+<!-- JS do Leaflet -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  // ✅ Centralizado corretamente na região dos marcadores (Paulista/Janga)
+  const map = L.map('map').setView([-7.925, -34.840], 14);
+
+  // Camada do OpenStreetMap
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  // Lista de estabelecimentos (fácil de editar e expandir)
+  const estabelecimentos = [
+    [-7.9316810, -34.8564830, "Comedoria O Guloso"],
+    [-7.8993010, -34.8294660, "Donna Miss"],
+    [-7.8918070, -34.8278890, "O Lenhador"],
+    [-7.9239330, -34.8509350, "Dona do Sabor"],
+    [-7.8799240, -34.8314670, "Zé Coxinha"],
+    [-7.9510240, -34.8616980, "Recanto Oriental"],
+    [-7.9618660, -34.8482960, "Papi Burger"],
+    [-7.9224980, -34.8213900, "Crispy Chicken / Rainha da Pizza / Click Pizza"],
+    [-7.9043160, -34.8358990, "Oriental Sushi"],
+    [-7.9017060, -34.8266080, "JR Lanches"],
+    [-7.9188620, -34.8248550, "Tropical Comedoria"],
+    [-7.9326260, -34.8236420, "Hamburgrill"],
+    [-7.9735260, -34.8373990, "Barriga Cheia"],
+    [-7.9193950, -34.8219770, "J Mix Janga"],
+    [-7.9291980, -34.8228770, "Delikata"],
+    [-7.9466440, -34.8574560, "Marrom Glacê"],
+    [-7.9133590, -34.8389910, "RS Galetos"],
+    [-7.9200120, -34.8213270, "Kyoto Sushi / Sushi Prime"],
+    [-7.9043030, -34.8260330, "Rainha do Yaksoba / A Chinesinha"],
+    [-7.9175604, -34.8335600, "Super Lanches"],
+    [-7.9284147, -34.8223172, "Dogueria 1111"],
+    [-7.9443755, -34.8252818, "ComeKone Temakeria"],
+    [-7.9415900, -34.8247781, "Komu Sushi / Mini Mundo"],
+    [-7.9446462, -34.8253372, "Churrascaria Tempero Goiano"],
+    [-7.9319366, -34.8235994, "Restaurante Flor do Janga"],
+    [-7.9243953, -34.8213861, "Buu Creams"],
+    [-7.9621335, -34.8482154, "Chells Burger"],
+    [-7.9664126, -34.8327987, "Seu Parmê"],
+    [-7.9610054, -34.8367848, "Joe Sushi"],
+    [-7.9301599, -34.8549882, "Ootiima Pizza"],
+    [-7.8798862, -34.8307732, "Churrascaria do Gaúcho em Casa"],
+    [-7.9297200, -34.8236287, "Quero + Dog"],
+    [-7.9287376, -34.8233003, "Quero + Pizza"],
+    [-7.9292832, -34.8239754, "I9 Burger"],
+    [-7.9477598, -34.8575418, "Pizzarella"],
+    [-7.9527992, -34.8494706, "Esconderijo Bar & Petiscaria"],
+    [-7.9301105, -34.8231291, "Taiyang"],
+    [-7.9189167, -34.8210343, "Dona Florinda"],
+    [-7.9104700, -34.8241256, "Super Burguer"],
+    [-7.8919146, -34.8345475, "Carioca Burger"],
+    [-7.9078342, -34.8385612, "Kanan Sushi / Sushi Abusado"],
+    [-7.8963570, -34.8373510, "Vaca Burguer"],
+    [-7.9621181, -34.8432307, "Fina Farina Rio Doce"],
+    [-7.9687972, -34.8361139, "Papinhos Burguer"],
+    [-7.9461080, -34.8318885, "Amigos Pizza"],
+    [-7.9290676, -34.8542190, "X Pizza Food Paulista"],
+    [-7.9298282, -34.8230309, "Frosty Sorvetes Janga"],
+    [-7.9465326, -34.8578054, "Frosty Sorvetes Av. Brasil"],
+    [-7.9421545, -34.8655154, "Frosty Sorvetes Novo Atacarejo"],
+    [-7.9183393, -34.8331516, "Baluarte Mini-Market 24h"],
+    [-7.9479582, -34.8264661, "Seu Coxa"],
+    [-7.9389743, -34.8261289, "A Fábrica Pizzas"],
+    [-7.9317185, -34.8565782, "Recanto do Bob"],
+    [-7.9385682, -34.8289339, "Galeto do Rafa / Medeiros Pizza"],
+    [-7.9395735, -34.8321816, "NB House Burguer"],
+    [-7.9305502, -34.8636412, "Lucy Santos Confeitaria Artesanal"],
+    [-7.9259286, -34.8304986, "Esfiharia Shalom"]
+  ];
+
+  // Adiciona todos os marcadores automaticamente
+  estabelecimentos.forEach(([lat, lng, nome]) => {
+    L.marker([lat, lng]).addTo(map).bindPopup(nome);
+  });
+</script>
+
+</body>
+</html>
