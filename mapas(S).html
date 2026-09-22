@@ -39,7 +39,7 @@
 <!-- JS do Leaflet -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-  // ✅ Centralizado corretamente na região dos marcadores (Paulista/Janga)
+  
   const map = L.map('map').setView([-7.925, -34.840], 14);
 
   // Camada do OpenStreetMap
@@ -106,10 +106,10 @@
     [-7.9385682, -34.8289339, "Galeto do Rafa / Medeiros Pizza"],
     [-7.9395735, -34.8321816, "NB House Burguer"],
     [-7.9305502, -34.8636412, "Lucy Santos Confeitaria Artesanal"],
-    [-7.9259286, -34.8304986, "Esfiharia Shalom"]
+    [-7.9259286, -34.8304986, "Esfiharia Shalom"],
+    [-7.938315392948059, -34.82986524007472, "Arca Burguer"]
   ];
 
-  // Adiciona todos os marcadores automaticamente
   estabelecimentos.forEach(([lat, lng, nome]) => {
     L.marker([lat, lng]).addTo(map).bindPopup(nome);
   });
