@@ -1,5 +1,4 @@
-# UninassauFHSA
-# 🏃‍➡️KORRE🏍️
+# 👲🏍️KorreProject 🏍️👲
 Um mapa colaborativo feito para entregadores 99 FOOD. 
 
 Objetivo: Caso o entregador esteja oscioso, saberá os pontos estratégicos para aguardar a próxima entrega.
