@@ -1,39 +1,14 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Projeto Korre</title>
+OpenStreetMap + Leaflet
 
-  <!-- CSS do Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
-  <style>
-    #map {
-      height: 500px;
-      width: 100%;
-    }
-  </style>
-</head>
-<body>
+// </> utilizando o JavaScript, exemplo:
+L.marker([latitude, longetude]).addTo(map)
+  .bindPopup("NOME DO RESTAURANTE");
 
-<h2>Projeto Korre!</h2>
-<div id="map"></div>
 
-<!-- JS do Leaflet -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<script>
-  // Coordenadas (exemplo: Pernambuco)
-  var map = L.map('map').setView([-8.233, -35.796], 13);
-
-  // Camada do OpenStreetMap
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; OpenStreetMap'
-  }).addTo(map);
-
-  // Adicionando marcador
-  var marker = L.marker([-8.233, -35.796]).addTo(map);
+    L.marker([-7.8918070, -34.8278890]).addTo(map)
+    .bindPopup("O Lenhador");
 
     L.marker([-7.9316810, -34.8564830]).addTo(map)
     .bindPopup("Comedoria O Guloso");
@@ -214,12 +189,94 @@
 
 
 
+PARLA PIZZA MARANGUAPE I
+
+AÇAÍ HIT PAU AMARELO
 
 
-  // Popup
-  marker.bindPopup("Aqui é um ponto marcado!").openPopup();
 
+
+
+
+
+
+
+============================================
+===========================================
+
+ADD LOCALIZAÇÃO EM TEMPO-REAL
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Mapa com GPS</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+  <style>
+    #map {
+      height: 500px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Minha localização em tempo real</h2>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+  // Inicializa mapa (posição padrão)
+  var map = L.map('map').setView([-8.233, -35.796], 13);
+
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap'
+  }).addTo(map);
+
+  var marker;
+
+  // Função para atualizar posição
+  function atualizarPosicao(pos) {
+    var lat = pos.coords.latitude;
+    var lng = pos.coords.longitude;
+
+    // Atualiza mapa
+    map.setView([lat, lng], 16);
+
+    // Remove marcador anterior
+    if (marker) {
+      map.removeLayer(marker);
+    }
+
+    // Cria novo marcador
+    marker = L.marker([lat, lng]).addTo(map)
+      .bindPopup("Você está aqui 📍")
+      .openPopup();
+  }
+
+  function erroGPS(err) {
+    alert("Erro ao obter localização: " + err.message);
+  }
+
+  // 🔥 GPS em tempo real (fica atualizando)
+  navigator.geolocation.watchPosition(
+    atualizarPosicao,
+    erroGPS,
+    {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+      timeout: 5000
+    }
+  );
 </script>
 
 </body>
 </html>
+
+
+
+// OI GENILSOOOOOOOON

@@ -28,6 +28,33 @@
       width: 100%;
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+
+   
+    #lista-restaurantes {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%;
+    max-width: 600px;
+    max-height: 200px;
+    overflow-y: auto;
+    background: white;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+    padding: 10px;
+    z-index: 999;
+  }
+
+  .item-restaurante {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+  }
+
+  .item-restaurante strong {
+    color: #111;
+  }
     }
   </style>
 </head>
@@ -35,6 +62,7 @@
 
 <h2>🍽️ Projeto Korre - Estabelecimentos Locais</h2>
 <div id="map"></div>
+<div id="lista-restaurantes"></div>
 
 <!-- JS do Leaflet -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -62,30 +90,43 @@ map.locate({
 
 map.on('locationfound', function(e) {
   const latlng = e.latlng;
-  const raio = e.accuracy;
 
+  // 📏 raio fixo de 3 km
+  const RAIO = 2750;
+
+  // limpa anterior
   if (marcadorUsuario) {
     map.removeLayer(marcadorUsuario);
     map.removeLayer(circuloPrecisao);
   }
 
+  // 📍 marcador do usuário
   marcadorUsuario = L.marker(latlng)
     .addTo(map)
     .bindPopup("📍 Você está aqui")
     .openPopup();
 
+  // 🔵 círculo de 3.5km
   circuloPrecisao = L.circle(latlng, {
-    radius: raio,
-    color: 'blue',
-    fillColor: '#3b82f6',
-    fillOpacity: 0.2
+    radius: RAIO,
+    color: 'green',
+    fillColor: '#22c55e',
+    fillOpacity: 0.15
   }).addTo(map);
 
-  map.setView(latlng, 16);
-});
+  // 🧠 filtrar e mostrar só os próximos
+  estabelecimentos.forEach(([lat, lng, nome]) => {
+    const distancia = latlng.distanceTo([lat, lng]); // metros
 
-map.on('locationerror', function(e) {
-  alert("Erro ao obter localização: " + e.message);
+    if (distancia <= RAIO) {
+      L.marker([lat, lng])
+        .addTo(map)
+        .bindPopup(`${nome}<br>📏 ${(distancia/1000).toFixed(2)} km`);
+    }
+  });
+
+  // centraliza
+  map.setView(latlng, 14);
 });
 
 // ============================
