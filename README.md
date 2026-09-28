@@ -4,7 +4,7 @@ Um mapa colaborativo feito para entregadores 99 FOOD.
 Público alvo e objetivo do projeto: 
 O projeto tem como público alvo os entregadores que estão cadastrados no programa "Agenda Aí" da 99 Food na região de Paulista-PE.
 A proposta é ajudar o entregador a identificar as regiões com maior concentração de lojas e, consequentemente, com mais possibilidades de receber pedidos, permitindo que ele escolha estrategicamente onde permanecer durante o período de trabalho.
-Isso é especialmente relevante porque, considerando a dinâmica das plataformas, as solicitações de entrega são direcionadas aos motociclistas que estejam dentro de uma determinada área de proximidade da loja, estimada em até 3.5kms.
+Isso é especialmente relevante porque, considerando a dinâmica das plataformas, as solicitações de entrega são direcionadas aos entregadores que estejam dentro de uma determinada área de proximidade da loja, estimada em até 3.5kms.
 
 
 ## 🛠️ Tecnologias Utilizadas
