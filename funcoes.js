@@ -25,7 +25,7 @@ function parseHorario(texto) {
   }
 
   texto.split('|').map(b => b.trim()).forEach(bloco => {
-    // Padrão mais flexível
+   
     const m = bloco.match(/([\wà-ú-]+)\s*[:：]\s*([\d:h]+)\s*(?:às|as|a)\s*([\d:h]+)/i);
     if (!m) return;
     
@@ -83,9 +83,7 @@ function criarIcone(aberta) {
   });
 }
 
-// ==========================================
-// 📍 DESENHA MARCADORES
-// ==========================================
+
 let estabelecimentos = [], marcadores = [];
 
 function adicionarMarcador(lat, lng, nome, horario) {
@@ -121,9 +119,7 @@ function atualizarTudo() {
   });
 }
 
-// ==========================================
-// 💾 CARREGA E SALVA
-// ==========================================
+
 function carregarLojas() {
   const salvas = localStorage.getItem('lojasCadastradas');
   estabelecimentos = [...LOJAS_ORIGINAIS];
@@ -143,9 +139,6 @@ function salvarLojas() {
   ));
 }
 
-// ==========================================
-// ➕ CADASTRO
-// ==========================================
 function pontoNoPoligono(lat, lng, poligono) {
   let dentro = false;
   for (let i = 0, j = poligono.length - 1; i < poligono.length; j = i++) {
@@ -173,7 +166,6 @@ function cadastrarLoja() {
     return;
   }
   
-  // Adiciona a loja no mapa
   estabelecimentos.push([lat, lng, nome, horario]);
   salvarLojas();
   atualizarTudo();
@@ -220,12 +212,11 @@ function copiarCodigo() {
   alert('✅ Código copiado! Agora é só colar no lojas-dados.js dentro do colchete!');
 }
 
-// Desenha contorno da área
 L.polygon(AREA_ATUACAO, {
   color: '#111', weight: 4, fillColor: '#000', fillOpacity: 0.04, interactive: false
 }).addTo(map);
 
-// GPS
+
 let marcadorLocalizacao = null;
 let circuloLocalizacao = null;
 
