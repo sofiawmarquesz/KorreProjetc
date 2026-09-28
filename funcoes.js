@@ -213,9 +213,12 @@ function copiarCodigo() {
 }
 
 L.polygon(AREA_ATUACAO, {
-  color: '#111', weight: 4, fillColor: '#000', fillOpacity: 0.04, interactive: false
+  color: '#111',
+  weight: 4,
+  fillColor: '#000',
+  fillOpacity: 0.04,
+  interactive: false
 }).addTo(map);
-
 
 let marcadorLocalizacao = null;
 let circuloLocalizacao = null;
@@ -226,11 +229,17 @@ map.on('locationfound', e => {
   if (marcadorLocalizacao) map.removeLayer(marcadorLocalizacao);
   if (circuloLocalizacao) map.removeLayer(circuloLocalizacao);
 
-  marcadorLocalizacao = L.marker(e.latlng)
-    .addTo(map)
-    .bindPopup("📍 Você está aqui")
-    .openPopup();
-  
+  marcadorLocalizacao = L.circleMarker(e.latlng, {
+    radius: 10,              
+    fillColor: '#3b82f6',   
+    color: '#fff',          
+    weight: 2,            
+    fillOpacity: 1          
+  })
+  .addTo(map)
+  .bindPopup("Você está aqui")
+  .openPopup();
+
   circuloLocalizacao = L.circle(e.latlng, {
     radius: 2750,
     color: 'green',
@@ -238,5 +247,4 @@ map.on('locationfound', e => {
     fillOpacity: 0.15
   }).addTo(map);
 });
-
 carregarLojas();
