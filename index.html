@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projeto Korre - Mapa de Estabelecimentos</title>
+
+  <!-- CSS do Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <!-- Nosso CSS -->
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+
+  <h2>🍽️ Projeto Korre - Estabelecimentos Agenda Aí - Paulista</h2>
+  <div id="map"></div>
+  <div id="lista-restaurantes"></div>
+
+  <!-- JS do Leaflet (sempre primeiro) -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Nossos scripts — A ORDEM IMPORTA! -->
+  <script src="js/config.js"></script>           <!-- 1. chave da API e ajustes -->
+  <script src="js/mapa.js"></script>             <!-- 2. cria o mapa -->
+  <script src="js/estabelecimentos.js"></script> <!-- 3. lista de restaurantes -->
+  <script src="js/categorias.js"></script>       <!-- 4. tipo de comida (ícone e cor) -->
+  <script src="js/horarios.js"></script>         <!-- 5. horários de funcionamento -->
+  <script src="js/area-atuacao.js"></script>     <!-- 6. borda hexagonal -->
+  <script src="js/rotas.js"></script>            <!-- 7. distância e trajeto pelas ruas -->
+  <script src="js/marcadores.js"></script>       <!-- 8. coloca os pinos -->
+  <script src="js/gps.js"></script>              <!-- 9. localização do usuário -->
+
+</body>
+</html>
