@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projeto Korre - Estabelecimentos</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+
+<h2>🍽️ Projeto Korre - Estabelecimentos Agenda Aí</h2>
+
+<div id="form-cadastro">
+  <h3>📍 Cadastrar Novo Estabelecimento</h3>
+  <div class="grupo-form">
+    <label for="nome-loja">Nome</label>
+    <input type="text" id="nome-loja" required>
+  </div>
+  <div class="grupo-form">
+    <label for="lat-loja">Latitude</label>
+    <input type="number" step="0.000001" id="lat-loja" required>
+  </div>
+  <div class="grupo-form">
+    <label for="lng-loja">Longitude</label>
+    <input type="number" step="0.000001" id="lng-loja" required>
+  </div>
+  <div class="grupo-form">
+    <label for="horario-loja">Horário de Funcionamento</label>
+    <textarea id="horario-loja" rows="3" required></textarea>
+  </div>
+  <button class="btn-cadastrar" onclick="cadastrarLoja()">Cadastrar</button>
+  <div id="msg-sucesso" class="mensagem sucesso">✅ Cadastrado!</div>
+  <div id="msg-erro" class="mensagem erro">❌ Fora da área!</div>
+</div>
+
+<div id="map"></div>
+
+<div id="lista-restaurantes">
+  <h4> Estabelecimentos</h4>
+  <div id="lista-conteudo"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="lojas-dados.js"></script>
+<script src="funcoes.js"></script>
+</body>
+</html>
