@@ -1,6 +1,6 @@
-// ============================
+// ===================
 // 🗺️ CRIAÇÃO DO MAPA
-// ============================
+// ===================
 // Este é o PRIMEIRO arquivo: cria a variável "map" que os outros usam.
 
 // Centralizado na região dos marcadores (Paulista/Janga)

@@ -14,7 +14,6 @@ const estabelecimentos = [
   [-7.9200120, -34.8213270, "Kyoto Sushi / Sushi Prime"],
   [-7.9175604, -34.8335600, "Super Lanches"],
   [-7.9284147, -34.8223172, "Dogueria 1111"],
-  [-7.9443755, -34.8252818, "ComeKone Temakeria"],
   [-7.9415900, -34.8247781, "Komu Sushi / Mini Mundo"],
   [-7.9446462, -34.8253372, "Churrascaria Tempero Goiano"],
   [-7.9319366, -34.8235994, "Restaurante Flor do Janga"],
@@ -38,14 +37,12 @@ const estabelecimentos = [
   [-7.9293077, -34.8242179, "Caldinho da Sogra Bar e Comedoria"],
   [-7.9227925, -34.833367, "Pizza Pires"],
   [-7.9348858, -34.8243762, "Kin Sushi"],
-  [-7.9417328, -34.8269029, "King Tapioca Janga"],
+  [-7.9419375,-34.8242417, "King Tapioca Janga"],
   [-7.9184666, -34.823479, "Duofeiojadaria"],
   [-7.931531, -34.823754, "Hapoke Janga"],
 
-
   // PAU AMARELO
   [-7.8993010, -34.8294660, "Donna Miss"],
-  [-7.9510240, -34.8616980, "Recanto Oriental"],
   [-7.9017060, -34.8266080, "JR Lanches"],
   [-7.9133590, -34.8389910, "RS Galetos"],
   [-7.9043030, -34.8260330, "Rainha do Yaksoba / A Chinesinha"],
@@ -60,7 +57,6 @@ const estabelecimentos = [
   [-7.9150252, -34.8284627, "Sabor Nordestino"],
   [-7.913464, -34.822688, "Lice Doces Encantados"],
   [-7.901156, -34.828243, "Brownies, Bolos e Sobremesas Airla & Dodô"],
-
 
   // NOSSA SENHORA DA CONCEIÇÃO
   [-7.8918070, -34.8278890, "O Lenhador"],
@@ -81,7 +77,6 @@ const estabelecimentos = [
   [-7.9305502, -34.8636412, "Lucy Santos Confeitaria Artesanal"],
   [-7.928152, -34.860715, "Paraíso Açaí e Lanche"],
 
-
   // MARANGUAPE II
   [-7.9316810, -34.8564830, "Comedoria O Guloso"],
   [-7.9301599, -34.8549882, "Ootiima Pizza"],
@@ -96,7 +91,6 @@ const estabelecimentos = [
   [-7.9323352, -34.8579666, "Coronel Lanches"],
   [-7.9321960, -34.8552210, "Sabores Pernambucanos"],
 
-
   // MARANGUAPE I
   [-7.9043160, -34.8358990, "Oriental Sushi"],
   [-7.9466440, -34.8574560, "Marrom Glacê"],
@@ -106,11 +100,10 @@ const estabelecimentos = [
   [-7.947447, -34.856227, "Coxinha de Batata Bom de Minas"],
   [-7.947214, -34.864366, "Le Sushi"],
   [-7.945479, -34.862266, "Mister Pizzaria & Restaurante"],
-
+  [-7.9510240, -34.8616980, "Recanto Oriental"],
 
   // JARDIM MARANGUAPE
   [-7.9527992, -34.8494706, "Esconderijo Bar & Petiscaria"],
-
 
   // RIO DOCE
   [-7.9618660, -34.8482960, "Papi Burger"],
@@ -126,8 +119,6 @@ const estabelecimentos = [
   [-7.967355, -34.847722, "Point do Pastel"],
   [-7.9570674, -34.8521205, "Maria's Confeitaria Gourmet"],
   
-
-
   // JARDIM ATLÂNTICO
   [-7.9735260, -34.8373990, "Barriga Cheia"],
   [-7.9687972, -34.8361139, "Papinhos Burguer"],
