@@ -1,6 +1,6 @@
-// ============================
+// ====================
 // 📡 GPS EM TEMPO REAL
-// ============================
+// ====================
 // Depende de: config.js, mapa.js, rotas.js e marcadores.js
 
 // Ícone do usuário: um ponto azul feito em CSS (ver .ponto-usuario no estilo.css)
