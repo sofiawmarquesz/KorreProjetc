@@ -79,7 +79,6 @@ const estabelecimentos = [
 
   // MARANGUAPE II
   [-7.9316810, -34.8564830, "Comedoria O Guloso"],
-  [-7.9301599, -34.8549882, "Ootiima Pizza"],
   [-7.9290676, -34.8542190, "X Pizza Food Paulista"],
   [-7.9317185, -34.8565782, "Recanto do Bob"],
   [-7.9388172, -34.8566861, "JB Caldinho"],

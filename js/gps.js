@@ -63,6 +63,7 @@ async function atualizarDistancias(origem) {
 
   // 1) Pré-filtro rápido em linha reta. O trajeto nunca é menor que a
   //    linha reta, então quem está fora do raio aqui também estaria pela rota.
+  //    (Isto é só um filtro: nenhuma distância em linha reta é exibida para lojas distantes.)
   const candidatos = marcadoresRestaurantes.filter(m =>
     origem.distanceTo([m.dados.lat, m.dados.lng]) <= RAIO
   );
@@ -85,10 +86,15 @@ async function atualizarDistancias(origem) {
   // Se enquanto esperava a resposta já começou um cálculo mais novo, descarta este
   if (meuNumero !== numeroCalculo) return;
 
-  // 3) Guarda a distância só em quem está dentro do raio PELO TRAJETO
-  marcadoresRestaurantes.forEach(m => { m.dados.rota = null; });
+  // 3) Dentro do raio → rota. Fora → distanciaFora (só se veio de carro, nunca linha reta)
+  marcadoresRestaurantes.forEach(m => {
+    m.dados.rota = null;
+    m.dados.distanciaFora = null;   // você se moveu: distâncias antigas ficam inválidas
+  });
   candidatos.forEach((m, i) => {
     const r = resultados[i];
-    if (r.distancia != null && r.distancia <= RAIO) m.dados.rota = r;
+    if (r.distancia == null) return;
+    if (r.distancia <= RAIO) m.dados.rota = r;
+    else if (!r.linhaReta) m.dados.distanciaFora = r;
   });
 }

@@ -11,7 +11,7 @@ const CHAVE_ORS = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6Ijc0NzIzO
 const PERFIL_ROTA = 'driving-car';
 
 // 📏 Raio de entrega em metros (medido pelo trajeto, não em linha reta)
-const RAIO = 2750;
+const RAIO = 3500;
 
 // Só recalcula as distâncias quando você se mover mais que isso (em metros).
 // Evita gastar requisições da API a cada pequena atualização do GPS.
