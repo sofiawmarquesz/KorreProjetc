@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projeto Korre</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #222;
+    }
+    #map {
+      height: 55vh;
+      min-height: 400px;
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      margin-bottom: 20px;
+    }
+    /* Formulário de Cadastro */
+    #form-cadastro {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    #form-cadastro h3 {
+      margin-bottom: 15px;
+      color: #222;
+    }
+    .grupo-form {
+      margin-bottom: 12px;
+    }
+    .grupo-form label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      font-size: 14px;
+      color: #333;
+    }
+    .grupo-form input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .btn-cadastrar {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .btn-cadastrar:hover {
+      background: #1d4ed8;
+    }
+    .mensagem {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      display: none;
+    }
+    .sucesso {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+    .erro {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+    /* Lista de lojas */
+    #lista-restaurantes {
+      max-height: 200px;
+      overflow-y: auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 15px;
+    }
+    #lista-restaurantes h4 {
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee;
+    }
+    .item-restaurante {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+    }
+    .item-restaurante strong {
+      color: #111;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Korre</h2>
+
+<!-- Formulário de Cadastro -->
+<div id="form-cadastro">
+  <h3>Cadastrar Novo Estabelecimento</h3>
+  <div class="grupo-form">
+    <label for="nome-loja">Nome do Estabelecimento</label>
+    <input type="text" id="nome-loja" placeholder="Ex: Pizzaria do Zé" required>
+  </div>
+  <div class="grupo-form">
+    <label for="lat-loja">Latitude</label>
+    <input type="number" step="0.000001" id="lat-loja" placeholder="-7.123456" required>
+  </div>
+  <div class="grupo-form">
+    <label for="lng-loja">Longitude</label>
+    <input type="number" step="0.000001" id="lng-loja" placeholder="-34.123456" required>
+  </div>
+  <button class="btn-cadastrar" onclick="cadastrarLoja()">Cadastrar Estabelecimento</button>
+  <div id="msg-sucesso" class="mensagem sucesso">✅ Estabelecimento cadastrado com sucesso!</div>
+  <div id="msg-erro" class="mensagem erro">❌ Estabelecimento fora da área de atuação!</div>
+</div>
+
+<div id="map"></div>
+
+<div id="lista-restaurantes">
+  <h4>Estabelecimentos</h4>
+  <div id="lista-conteudo"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  
+  const map = L.map('map').setView([-7.925, -34.840], 14);
+
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  
+  const AREA_ATUACAO = [
+    [-7.850, -34.838], [-7.850, -34.828], [-7.870, -34.830], [-7.895, -34.822],
+    [-7.915, -34.818], [-7.935, -34.818], [-7.955, -34.824], [-7.970, -34.830],
+    [-7.980, -34.838], [-7.978, -34.855], [-7.965, -34.864], [-7.950, -34.878],
+    [-7.935, -34.880], [-7.915, -34.868], [-7.900, -34.855], [-7.885, -34.848],
+    [-7.870, -34.842], [-7.858, -34.845]
+  ];
+  const TAMANHO_HEX = 450;
+
+  // ---- Funções auxiliares ----
+  function pontoNoPoligono(lat, lng, poligono) {
+    let dentro = false;
+    for (let i = 0, j = poligono.length - 1; i < poligono.length; j = i++) {
+      const [yi, xi] = poligono[i];
+      const [yj, xj] = poligono[j];
+      if ((yi > lat) !== (yj > lat) && lng < ((xj - xi) * (lat - yi)) / (yj - yi) + xi) {
+        dentro = !dentro;
+      }
+    }
+    return dentro;
+  }
+
+  function contornoHexagonal(area, tamanho) {
+    const lat0 = area.reduce((s, p) => s + p[0], 0) / area.length;
+    const mLat = 111320;
+    const mLng = 111320 * Math.cos(lat0 * Math.PI / 180);
+    const lats = area.map(p => p[0]);
+    const lngs = area.map(p => p[1]);
+    const minLat = Math.min(...lats), maxLat = Math.max(...lats);
+    const minLng = Math.min(...lngs), maxLng = Math.max(...lngs);
+    const larguraHex = Math.sqrt(3) * tamanho;
+    const alturaLinha = 1.5 * tamanho;
+    const dLat = alturaLinha / mLat;
+    const dLng = larguraHex / mLng;
+
+    const contagemArestas = new Map();
+    const chave = (a, b) => a[0].toFixed(6) + ',' + a[1].toFixed(6) + '|' + b[0].toFixed(6) + ',' + b[1].toFixed(6);
+    let linha = 0;
+    for (let lat = minLat - dLat; lat <= maxLat + dLat; lat += dLat, linha++) {
+      const desloc = (linha % 2) * dLng / 2;
+      for (let lng = minLng - dLng + desloc; lng <= maxLng + dLng; lng += dLng) {
+        if (!pontoNoPoligono(lat, lng, area)) continue;
+        const v = [];
+        for (let k = 0; k < 6; k++) {
+          const ang = Math.PI / 180 * (60 * k - 30);
+          v.push([
+            +(lat + (tamanho * Math.sin(ang)) / mLat).toFixed(6),
+            +(lng + (tamanho * Math.cos(ang)) / mLng).toFixed(6)
+          ]);
+        }
+        for (let k = 0; k < 6; k++) {
+          const a = v[k], b = v[(k + 1) % 6];
+          const [p, q] = (a[0] < b[0] || (a[0] === b[0] && a[1] < b[1])) ? [a, b] : [b, a];
+          const c = chave(p, q);
+          const atual = contagemArestas.get(c);
+          contagemArestas.set(c, { a: p, b: q, n: atual ? atual.n + 1 : 1 });
+        }
+      }
+    }
+
+    const borda = [...contagemArestas.values()].filter(e => e.n === 1);
+    const vizinhos = new Map();
+    const id = p => p[0].toFixed(6) + ',' + p[1].toFixed(6);
+    borda.forEach((e, i) => {
+      [e.a, e.b].forEach(p => {
+        if (!vizinhos.has(id(p))) vizinhos.set(id(p), []);
+        vizinhos.get(id(p)).push(i);
+      });
+    });
+    const usada = new Array(borda.length).fill(false);
+    const aneis = [];
+    for (let i = 0; i < borda.length; i++) {
+      if (usada[i]) continue;
+      usada[i] = true;
+      const anel = [borda[i].a];
+      let atual = borda[i].b;
+      while (id(atual) !== id(anel[0])) {
+        anel.push(atual);
+        const prox = vizinhos.get(id(atual))?.find(j => !usada[j]);
+        if (prox === undefined) break;
+        usada[prox] = true;
+        atual = id(borda[prox].a) === id(atual) ? borda[prox].b : borda[prox].a;
+      }
+      aneis.push(anel);
+    }
+    return aneis;
+  }
+
+  // Desenha borda
+  let contornoAtuacao = [];
+  try {
+    contornoAtuacao = contornoHexagonal(AREA_ATUACAO, TAMANHO_HEX);
+    L.polygon(contornoAtuacao, {
+      color: '#111', weight: 4, fillColor: '#000', fillOpacity: 0.04, interactive: false
+    }).addTo(map);
+  } catch (erro) {
+    console.error('Erro ao desenhar área:', erro);
+  }
+
+  function dentroDaArea(lat, lng) {
+    return pontoNoPoligono(lat, lng, AREA_ATUACAO);
+  }
+
+  const LOJAS_ORIGINAIS = [
+    [-7.9316810, -34.8564830, "Comedoria O Guloso"],
+    [-7.8993010, -34.8294660, "Donna Miss"],
+    [-7.8918070, -34.8278890, "O Lenhador" não achado],
+    [-7.9239330, -34.8509350, "Dona do Sabor"],
+    [-7.8799240, -34.8314670, "Zé Coxinha"],
+    [-7.9510240, -34.8616980, "Recanto Oriental"],
+    [-7.9618660, -34.8482960, "Papi Burger"],
+    [-7.9224980, -34.8213900, "Crispy Chicken / Rainha da Pizza / Click Pizza"],
+    [-7.9043160, -34.8358990, "Oriental Sushi" não encontrado nem na 99],
+    [-7.9017060, -34.8266080, "JR Lanches"],
+    [-7.9188620, -34.8248550, "Tropical Comedoria"],
+    [-7.9326260, -34.8236420, "Hamburgrill"],
+    [-7.9735260, -34.8373990, "Barriga Cheia"],
+    [-7.9193950, -34.8219770, "J Mix Janga"],
+    [-7.9291980, -34.8228770, "Delikata"],
+    [-7.9466440, -34.8574560, "Marrom Glacê"],
+    [-7.9133590, -34.8389910, "RS Galetos"],
+    [-7.9200120, -34.8213270, "Kyoto Sushi / Sushi Prime"],
+    [-7.9043030, -34.8260330, "Rainha do Yaksoba / A Chinesinha"],
+    [-7.9175604, -34.8335600, "Super Lanches"],
+    [-7.9284147, -34.8223172, "Dogueria 1111"],
+    [-7.9443755, -34.8252818, "ComeKone Temakeria"] nao,
+    [-7.9415900, -34.8247781, "Komu Sushi / Mini Mundo"],
+    [-7.9446462, -34.8253372, "Churrascaria Tempero Goiano"],
+    [-7.9319366, -34.8235994, "Restaurante Flor do Janga"],
+    [-7.9243953, -34.8213861, "Buu Creams"],
+    [-7.9621335, -34.8482154, "Chellys Burger"],
+    [-7.9664126, -34.8327987, "Seu Parmê"],
+    [-7.9610054, -34.8367848, "Joe Sushi"],
+    [-7.9301599, -34.8549882, "Ootiima Pizza"],
+    [-7.8798862, -34.8307732, "Churrascaria do Gaúcho em Casa"],
+    [-7.9297200, -34.8236287, "Quero + Dog"],
+    [-7.9287376, -34.8233003, "Quero + Pizza"],
+    [-7.9292832, -34.8239754, "I9 Burger"],
+    [-7.9477598, -34.8575418, "Pizzarella"],
+    [-7.9527992, -34.8494706, "Esconderijo Bar & Petiscaria"],
+    [-7.9301105, -34.8231291, "Taiyang"],
+    [-7.9189167, -34.8210343, "Dona Florinda"],
+    [-7.9104700, -34.8241256, "Super Burguer"],
+    [-7.8919146, -34.8345475, "Carioca Burger"],
+    [-7.9078342, -34.8385612, "Kanan Sushi / Sushi Abusado"],
+    [-7.8963570, -34.8373510, "Vaca Burguer"],
+    [-7.9621181, -34.8432307, "Fina Farina Rio Doce"],
+    [-7.9687972, -34.8361139, "Papinhos Burguer"],
+    [-7.9461080, -34.8318885, "Amigos Pizza"],
+    [-7.9290676, -34.8542190, "X Pizza Food Paulista"],
+    [-7.9298282, -34.8230309, "Frosty Sorvetes Janga"],
+    [-7.9465326, -34.8578054, "Frosty Sorvetes Av. Brasil"],
+    [-7.9421545, -34.8655154, "Frosty Sorvetes Novo Atacarejo"],
+    [-7.9183393, -34.8331516, "Baluarte Mini-Market 24h"],
+    [-7.9479582, -34.8264661, "Seu Coxa"],
+    [-7.9389743, -34.8261289, "A Fábrica Pizzas"],
+    [-7.9317185, -34.8565782, "Recanto do Bob"],
+    [-7.9385682, -34.8289339, "Galeto do Rafa / Medeiros Pizza"],
+    [-7.9395735, -34.8321816, "NB House Burguer"],
+    [-7.9305502, -34.8636412, "Lucy Santos Confeitaria Artesanal"],
+    [-7.9259286, -34.8304986, "Esfiharia Shalom"],
+    [-7.9354624, -34.8245666, "Xaxando"],
+    [-7.9522642, -34.8311743, "Delícias da Elô"],
+    [-7.9297096, -34.850848, "Nosso Açaí"],
+    [-7.9323352, -34.8579666, "Coronel Lanches"],
+    [-7.9657973, -34.8576645, "Point do Yakisoba"],
+    [-7.9441754, -34.8252455, "Lá Portella Pizzaria"],
+    [-7.9135752, -34.8233586, "Tropical Comedoria (Almoço)"],
+    [-7.9293077, -34.8242179, "Caldinho da Sogra Bar e Comedoria"],
+    [-7.9677855, -34.8455425, "Almoço da Dora"],
+    [-7.9582489, -34.8512583, "Doces Arretados"],
+    [-7.9066715, -34.8254485, "Matutu's Burguer"],
+    [-7.9121042, -34.8250127, "Roots Comedoria - Comida Brasileira"],
+    [-7.8889267, -34.8330812, "Rainha da Feijoada"],
+    [-7.966997 , -34.8551061, "Marmitex da Quel"],
+    [-7.9247843, -34.8519426, "Combos 90 Graus"],
+    [-7.8996598, -34.8353112, "Sabor & Arte Hamburgueria"],
+    [-7.9388172, -34.8566861, "JB Caldinho"],
+    [-7.9022335, -34.8331462, "D'gustare Delivery"],
+    [-7.9348858, -34.8243762, "Kin Sushi"]
+  ];
+
+  // ============================
+  // 💾 SISTEMA DE CADASTRO + SALVAMENTO
+  // ============================
+  let estabelecimentos = [];
+  let marcadores = [];
+
+  // Carrega lojas salvas ou usa a lista original
+  function carregarLojas() {
+    const salvas = localStorage.getItem('lojasCadastradas');
+    if (salvas) {
+      // Se já tem lojas salvas, junta originais + novas
+      const novas = JSON.parse(salvas);
+      // Verifica se as originais já estão adicionadas para não duplicar
+      estabelecimentos = [...LOJAS_ORIGINAIS];
+      novas.forEach(loja => {
+        const existe = estabelecimentos.some(e => e[2] === loja[2] && e[0] === loja[0]);
+        if (!existe) estabelecimentos.push(loja);
+      });
+    } else {
+      // Primeira vez: usa só a lista original
+      estabelecimentos = [...LOJAS_ORIGINAIS];
+    }
+    atualizarTudo();
+  }
+
+  // Salva as lojas NOVAS no navegador
+  function salvarLojas() {
+    // Salva só as que foram cadastradas (não as originais)
+    const soNovas = estabelecimentos.filter(loja => {
+      return !LOJAS_ORIGINAIS.some(orig => orig[2] === loja[2] && orig[0] === loja[0]);
+    });
+    localStorage.setItem('lojasCadastradas', JSON.stringify(soNovas));
+  }
+
+  // Adiciona marcador no mapa
+  function adicionarMarcador(lat, lng, nome) {
+    const marcador = L.marker([lat, lng])
+      .addTo(map)
+      .bindPopup(`<strong>${nome}</strong><br>Lat: ${lat}<br>Lng: ${lng}`);
+    marcadores.push(marcador);
+  }
+
+  // Atualiza tudo
+  function atualizarTudo() {
+    marcadores.forEach(m => map.removeLayer(m));
+    marcadores = [];
+    const listaEl = document.getElementById('lista-conteudo');
+    listaEl.innerHTML = '';
+
+    estabelecimentos.forEach(([lat, lng, nome]) => {
+      adicionarMarcador(lat, lng, nome);
+      listaEl.innerHTML += `<div class="item-restaurante"><strong>${nome}</strong><br>📍 ${lat}, ${lng}</div>`;
+    });
+  }
+
+  // Cadastra nova loja
+  function cadastrarLoja() {
+    const nome = document.getElementById('nome-loja').value.trim();
+    const lat = parseFloat(document.getElementById('lat-loja').value);
+    const lng = parseFloat(document.getElementById('lng-loja').value);
+
+    if (!nome || isNaN(lat) || isNaN(lng)) {
+      alert('Preencha todos os campos corretamente!');
+      return;
+    }
+
+    if (!dentroDaArea(lat, lng)) {
+      document.getElementById('msg-erro').style.display = 'block';
+      document.getElementById('msg-sucesso').style.display = 'none';
+      setTimeout(() => document.getElementById('msg-erro').style.display = 'none', 3000);
+      return;
+    }
+
+    estabelecimentos.push([lat, lng, nome]);
+    salvarLojas();
+    atualizarTudo();
+
+    document.getElementById('nome-loja').value = '';
+    document.getElementById('lat-loja').value = '';
+    document.getElementById('lng-loja').value = '';
+    document.getElementById('msg-sucesso').style.display = 'block';
+    document.getElementById('msg-erro').style.display = 'none';
+    setTimeout(() => document.getElementById('msg-sucesso').style.display = 'none', 3000);
+  }
+
+  // ============================
+  // 📍 GPS EM TEMPO REAL
+  // ============================
+  let marcadorUsuario, circuloPrecisao;
+  const RAIO = 2750;
+
+  map.locate({ watch: true, enableHighAccuracy: true });
+
+  map.on('locationfound', function(e) {
+    const latlng = e.latlng;
+    if (marcadorUsuario) {
+      map.removeLayer(marcadorUsuario);
+      map.removeLayer(circuloPrecisao);
+    }
+    marcadorUsuario = L.marker(latlng).addTo(map).bindPopup("📍 Você está aqui").openPopup();
+    circuloPrecisao = L.circle(latlng, {
+      radius: RAIO, color: 'green', fillColor: '#22c55e', fillOpacity: 0.15
+    }).addTo(map);
+  });
+
+  // ============================
+  // 🚀 INICIALIZA
+  // ============================
+  carregarLojas();
+</script>
+
+</body>
+</html>
